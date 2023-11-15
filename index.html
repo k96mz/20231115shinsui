@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>expected flood areas and actual flood areas</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
+    <link
+      href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="map" style="height: 100vh"></div>
+    <script>
+      // import OpacityControl from "maplibre-gl-opacity";
+      // import "maplibre-gl-opacity/dist/maplibre-gl-opacity.css";
+      const map = new maplibregl.Map({
+        container: "map",
+        center: [138.279076, 36.691058],
+        zoom: 12,
+        style: {
+          // Maplibre-style
+          version: 8,
+          sources: {
+            // 地図上で使うデータを定義する
+            gsimaps: {
+              type: "raster",
+              tiles: [
+                "https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png",
+              ],
+              tileSize: 256,
+              maxzoom: 18,
+              attribution:
+                '<a href="https://maps.gsi.go.jp/development/ichiran.html">地理院タイル</a>',
+            },
+            shinsuiSoutei: {
+              type: "raster",
+              tiles: [
+                "https://disaportaldata.gsi.go.jp/raster/01_flood_l2_shinsuishin_data/{z}/{x}/{y}.png",
+              ],
+              tileSize: 256,
+              maxzoom: 17,
+              attribution:
+                '<a href="https://disaportal.gsi.go.jp/hazardmapportal/hazardmap/copyright/opendata.html">ハザードマップポータルサイト</a>',
+            },
+            // polygon: {
+            //   type: "geojson",
+            //   data: "./chikuma.geojson",
+            //   attribution:
+            //     '<a href="https://www.gsi.go.jp/BOUSAI/R1.taihuu19gou.html#11">浸水推定図</a>',
+            // },
+            polygon: {
+              type: "raster",
+              tiles: [
+                "https://maps.gsi.go.jp/xyz/20191012typhoon19_shinano_1013dansaizu/{z}/{x}/{y}.png",
+              ],
+              tileSize: 256,
+              maxzoom: 17,
+              attribution:
+                '<a href="https://www.gsi.go.jp/BOUSAI/R1.taihuu19gou.html#11">浸水推定図</a>',
+            },
+            //https://maps.gsi.go.jp/xyz/20191012typhoon19_shinano_1013dansaizu/13/7243/3198.png
+          },
+          layers: [
+            {
+              id: "gsi-layer",
+              source: "gsimaps", // 使うデータをsourcesのkeyで指定する。
+              type: "raster",
+            },
+            {
+              id: "shinsuiSoutei-layer",
+              source: "shinsuiSoutei",
+              type: "raster",
+              paint: { "raster-opacity": 0.7 },
+            },
+            // {
+            //   id: "polygon-layer",
+            //   source: "polygon",
+            //   type: "fill",
+            //   paint: {
+            //     "fill-color": "blue",
+            //   },
+            // },
+            {
+              id: "polygon-layer",
+              source: "polygon",
+              type: "raster",
+              paint: { "raster-opacity": 0.7 },
+            },
+          ],
+        },
+      });
+    </script>
+  </body>
+</html>
